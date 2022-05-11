@@ -156,4 +156,60 @@ namespace virtual_inheritance_function
   };
 }
 
+namespace virtual_accesslevel_interface
+{
+    class furniture
+    {
+    public:
+        int m_furWeight = 10;
+    private:
+        virtual void furFunc() = 0;
+    };
+
+    class sofa : public furniture
+    {
+    public:
+        void furFunc()override
+        {
+            cout << "sofa::furFunc" << endl;
+        }
+
+        virtual void sofaFunc()
+        {
+            cout << "sofa::sofaFunc" << endl;
+        }
+        int m_sofaWeight;
+    };
+
+    class bed : public furniture
+    {
+    public:
+        void furFunc()override
+        {
+            cout << "bed::furFunc" << endl;
+        }
+        virtual void bedFunc()
+        {
+            cout << "bed::bedFunc" << endl;
+        }
+        int m_bedWeight;
+    };
+
+    class sofabed : public sofa, public bed
+    {
+    public:
+        void furFunc()override
+        {
+            cout << "sofabed::furFunc" << endl;
+        }
+
+        virtual void sofabedFunc()
+        {
+            cout << "sofabed::sofabedFunc" << endl;
+        }
+        int m_sofabedWeight;
+    };
+}
+
+
 #endif //OBJECT_MODEL_H_

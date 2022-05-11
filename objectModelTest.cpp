@@ -308,6 +308,9 @@ void test_object_model_virtual_function()
 
 	cout << "sofBed1.sofa::m_furWeight        ->  " << &sofBed1.sofa::m_furWeight      << endl;
 	cout << "sofBed1.m_sofaWeight             ->  " << &sofBed1.m_sofaWeight           << endl;	
+
+	bed* pBed = static_cast<bed*>(&sofBed1);
+	cout << "bed of sofBed1                  ->  " << pBed << endl; //slice of object
 	
 	furFuncPtrOfSofaBed = (FUNC)baseAddressOfSofaBed[3][0];
 	furFuncPtrOfSofaBed();
@@ -322,9 +325,88 @@ void test_object_model_virtual_function()
 	cout << "sofBed1.m_sofabedWeight          ->  " << &sofBed1.m_sofabedWeight        << endl;		
 }
 
+//test case 4: object model with virtual function
+void test_object_model_virtual_accesslevel()
+{
+	using namespace virtual_accesslevel_interface;
+
+	typedef void(*FUNC)();
+
+	cout << endl;
+	cout << "**********Object model of furniture**********" << endl;
+	
+	
+
+	cout << endl;
+	cout << "**********Object model of sofa**********" << endl;
+	sofa s1;
+	cout << "sizeof sofa object is : " << sizeof(s1) << endl;
+	cout << "s1 address is   ->  " << &s1 << endl;
+	long long** baseAddressOfSofa = (long long**)(&s1);
+	FUNC furFuncPtrInSofa;
+	furFuncPtrInSofa = (FUNC)baseAddressOfSofa[0][0];
+	furFuncPtrInSofa();
+	FUNC furFunc2PtrInSofa;
+	furFunc2PtrInSofa = (FUNC)baseAddressOfSofa[0][1];
+	furFunc2PtrInSofa();
+	cout << "s1.m_furWeight  ->  " << &s1.m_furWeight << endl;
+	cout << "s1.m_sofaWeight ->  " << &s1.m_sofaWeight << endl;
+
+
+	cout << endl;
+	cout << "**********Object model of bed**********" << endl;
+	bed b1;
+	cout << "sizeof bed object is : " << sizeof(b1) << endl;
+	cout << "b1              ->  " << &b1 << endl;
+	long long** baseAddressOfBed = (long long**)(&b1);
+	FUNC furFuncInBed;
+	furFuncInBed = (FUNC)baseAddressOfBed[0][0];
+	furFuncInBed();
+	FUNC furFunc2InBed;
+	furFunc2InBed = (FUNC)baseAddressOfBed[0][1];
+	furFunc2InBed();
+	cout << "b1.m_furWeight  ->  " << &b1.m_furWeight << endl;
+	cout << "b1.m_bedWeight  ->  " << &b1.m_bedWeight << endl;
+
+
+	cout << endl;
+	cout << "**********Object model of sofabed**********" << endl;
+	sofabed sofBed1;
+	cout << "sizeof sofabed object is : " << sizeof(sofBed1) << endl;
+	cout << "sofBed1 (also the sofa part)     ->  " << &sofBed1 << endl;
+	long long** baseAddressOfSofaBed = (long long**)(&sofBed1);
+	FUNC furFuncPtrOfSofaBed;
+	furFuncPtrOfSofaBed = (FUNC)baseAddressOfSofaBed[0][0];
+	furFuncPtrOfSofaBed();
+	FUNC furFunc2PtrOfSofaBed;
+	furFunc2PtrOfSofaBed = (FUNC)baseAddressOfSofaBed[0][1];
+	furFunc2PtrOfSofaBed();
+	FUNC sofaFuncPtrOfSofaBed;
+	sofaFuncPtrOfSofaBed = (FUNC)baseAddressOfSofaBed[0][2];
+	sofaFuncPtrOfSofaBed();
+
+	cout << "sofBed1.sofa::m_furWeight        ->  " << &sofBed1.sofa::m_furWeight << endl;
+	cout << "sofBed1.m_sofaWeight             ->  " << &sofBed1.m_sofaWeight << endl;
+
+	bed* pBed = static_cast<bed*>(&sofBed1);
+
+	//slice of object
+	cout << "bed(part) of sofBed1             ->  " << pBed << endl;
+
+	furFuncPtrOfSofaBed = (FUNC)baseAddressOfSofaBed[3][0];
+	furFuncPtrOfSofaBed();
+	furFunc2PtrOfSofaBed = (FUNC)baseAddressOfSofaBed[3][1];
+	furFunc2PtrOfSofaBed();
+
+	cout << "sofBed1.bed::m_furWeight         ->  " << &sofBed1.bed::m_furWeight << endl;
+	cout << "sofBed1.m_bedWeight              ->  " << &sofBed1.m_bedWeight << endl;
+	cout << "sofBed1.m_sofabedWeight          ->  " << &sofBed1.m_sofabedWeight << endl;
+}
+
 
 int main()
 {
 	test_object_model_virtual_function();
+	test_object_model_virtual_accesslevel();
 	return 0;
 }
